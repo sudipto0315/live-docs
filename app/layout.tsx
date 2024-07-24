@@ -14,9 +14,9 @@ const fontSans = FontSans({
 })
 
 export const metadata: Metadata = {
-  title : "LiveDocs",
-  description: "A simple text editor for collaborative writing",
-  icons: "/assets/images/logo.png",
+  title : "TextFlow",
+  description: "A platform for writers to create, share, and collaborate on documents.",
+  icons: "/assets/images/TextFlowLogo.png",
 }
 
 export default function RootLayout({ children }: {children: React.ReactNode}) {
