@@ -6,7 +6,7 @@ import { liveblocks } from "../liveblocks";
 
 export const getClerkUsers = async ({ userIds }: { userIds: string[]}) => {
   try {
-    const { data } = await clerkClient.users.getUserList({
+    const { data } = await clerkClient().users.getUserList({
       emailAddress: userIds,
     });
 
@@ -25,17 +25,21 @@ export const getClerkUsers = async ({ userIds }: { userIds: string[]}) => {
   }
 }
 
-export const getDocumentUsers = async ({ roomId, userID }: { roomId: string, userID: string}) => {
+export const getDocumentUsers = async ({ roomId, currentUser, text }: { roomId: string, currentUser: string, text: string }) => {
   try {
     const room = await liveblocks.getRoom(roomId);
 
-    const hasAccess = Object.keys(room.usersAccesses).includes(userID);
+    const users = Object.keys(room.usersAccesses).filter((email) => email !== currentUser);
 
-    if(!hasAccess) {
-        throw new Error('You do not have access to this document');
+    if(text.length) {
+      const lowerCaseText = text.toLowerCase();
+
+      const filteredUsers = users.filter((email: string) => email.toLowerCase().includes(lowerCaseText))
+
+      return parseStringify(filteredUsers);
     }
-    return parseStringify(room);
-    
+
+    return parseStringify(users);
   } catch (error) {
     console.log(`Error fetching document users: ${error}`);
   }
